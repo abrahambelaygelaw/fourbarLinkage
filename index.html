@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Four-bar Linkage Simulator</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Four-bar Linkage Simulator</h1>
+      <div class="simulator">
+        <div>
+        <div class="canvas-container" id="canvas-container">
+          <div class="canvas-wrapper" id="canvas-wrapper">
+            <canvas id="canvas" width="2000" height="2000"></canvas>
+            <div class="invalid-linkage" id="invalid-linkage">
+              <p>Invalid Linkage</p>
+            </div>
+          </div>
+        </div>
+        <div class="controls-group">
+            <section class="control-section">
+            <div class="input-group checkbox-input">
+              <label for="direction">Inverse input </label>
+              <input type="checkbox" id="direction" class="orientation"/>
+            </div>
+            <div class="input-group checkbox-input">
+              <label for="reverse-angle">Flip output triangle</label>
+              <input type="checkbox" id="reverse-angle" class="checkbox orientation"  />
+            </div>
+            <div class="input-group">
+              <label for="ground-angle">Ground Angle:</label>
+              <input
+                type="range"
+                id="ground-angle"
+                value="0"
+                min="0"
+                max="360"
+                class="orientation"
+              />
+            </div>
+            <div class="input-group">
+              <label for="coupler-position" id="position-label">Coupler Position:</label>
+              <input
+                type="range"
+                id="coupler-position"
+                value="0"
+                min="-400"
+                max="400"
+                step="1"
+                class="orientation"
+              />
+            </div>
+            <div class="input-group">
+              <label for="coupler-offset" id="offset-label">Coupler Offset:</label>
+              <input
+                type="range"
+                id="coupler-offset"
+                value="0"
+                min="-400"
+                max="400"
+                step="1"
+                class="orientation"
+              />
+            </div>
+          </section>
+          <section class="control-section">
+            <div class="input-group checkbox-input">
+              <label for="oscInput">Limited reciprocating input</label>
+              <input type="checkbox" id="oscInput" class="checkbox" />
+            </div>
+            <div class="input-group">
+              <label for="oscInput-center">Input angle center:</label>
+              <input
+                type="range"
+                id="oscInput-center"
+                value="50"
+                min="0"
+                max="100"
+                step="5"
+              />
+            </div>
+            <div class="input-group">
+              <label for="oscInput-range">Input angle range:</label>
+              <input
+                type="range"
+                id="oscInput-range"
+                value="50"
+                min="0"
+                max="100"
+                step="5"
+              />
+            </div>
+            </section>
+</div>
+        </div>
+        <div class="controls-group">
+          <section class="control-section">
+            <div class="info-group">
+              <span class="info-title"> Input type: </span>
+              <span class="info-value" id="input-type"> </span>
+            </div>
+            <div class="info-group">
+              <span class="info-title"> Output type: </span>
+              <span class="info-value" id="output-type"> </span>
+            </div>
+            <div class="info-group">
+              <span class="info-title">Linkage type:</span>
+              <span class="info-value" id="linkage-type"></span>
+            </div>
+            <div class="info-group">
+              <span class="info-title">Validity index:</span>
+              <span class="info-value" id="validity-index"></span>
+            </div>
+            <div class="info-group">
+              <span class="info-title">Ground angle:</span>
+              <span class="info-value" id="grashof-index"></span>
+            </div>
+          </section>
+          </section>
+          <section class="control-section">
+
+            <div class="checkbox-input">
+              <label for="show-input">Show input range </label>
+              <input type="checkbox" class="checkbox" id="show-input" />
+            </div>
+            <div class="checkbox-input">
+              <label for="trace-coupler">Trace Coupler</label>
+              <input type="checkbox" id="trace-coupler" class="checkbox" />
+            </div>
+            <div class="checkbox-input">
+              <label for="trace-input">Trace Input</label>
+              <input type="checkbox" id="trace-input" class="checkbox" />
+            </div>
+            <div class="checkbox-input">
+              <label for="trace-output">Trace Output</label>
+              <input type="checkbox" id="trace-output" class="checkbox" />
+            </div>
+            <div class="checkbox-input">
+              <label for="show-labels">Show labels </label>
+              <input type="checkbox" id="show-labels" class="checkbox" checked />
+            </div>
+            <div class="input-group">
+              <label for="speed">Speed:</label>
+              <input type="range" id="speed" value="3" min="1" max="100" />
+            </div>
+            <div class="button-group">
+              <button id="play">Play</button>
+              <button id="reset">Reset</button>
+            </div>
+          </section>
+        <div class="tab-contents control-section">
+          <div class="tabs">
+            <div id="length-input" data-tab="length-tab" class="tab active">
+              Length
+            </div>
+            <div id="coordinate-input" data-tab="coordinates-tab" class="tab">
+              Coordinates
+            </div>
+          </div>
+        <section class=" tab-content active" id="length-tab">
+            <div>
+
+            <div class="input-group">
+              <label for="link1" id="link1-label">Ground Link (L1):</label>
+              <input
+                class="link"
+                type="range"
+                id="link1"
+                value="40"
+                min="1"
+                max="100"
+                step="0.1"
+              />
+            </div>
+            <div class="input-group">
+              <label for="link2" id="link2-label">Input Link (L2):</label>
+              <input
+                class="link"
+                type="range"
+                id="link2"
+                value="40"
+                min="1"
+                max="100"
+                step="0.1"
+              />
+            </div>
+            <div class="input-group">
+              <label for="link3" id="link3-label">Coupler (L3):</label>
+              <input
+                class="link"
+                type="range"
+                id="link3"
+                value="40"
+                min="1"
+                max="100"
+                step="0.1"
+              />
+            </div>
+            <div class="input-group">
+              <label for="link4" id="link4-label">Output Link (L4):</label>
+              <input
+                class="link"
+                type="range"
+                id="link4"
+                value="40"
+                min="1"
+                max="100"
+                step="0.1"
+              />
+            </div>
+            </div>
+            <div>
+              <div class="input-group">
+                <label for="link1number">Ground link:</label>
+                <input
+                  class="link-number"
+                  type="number"
+                  id="link1number"
+                  value="40"
+                  min="1"
+                  max="100"
+                  step="0.1"
+                  title="Enter the length of Link 1"
+                  placeholder="Link 1 Length"
+                />
+              </div>
+              <div class="input-group">
+                <label for="link2number">Input link:</label>
+                <input
+                  class="link-number"
+                  type="number"
+                  id="link2number"
+                  value="40"
+                  min="1"
+                  max="100"
+                  step="0.1"
+                  title="Enter the length of Link 2"
+                  placeholder="Link 2 Length"
+                />
+                </div>
+              <div class="input-group">
+                <label for="link3number">Coupler link:</label>
+                <input
+                  class="link-number"
+                  type="number"
+                  id="link3number"
+                  value="40"
+                  min="1"
+                  max="100"
+                  step="0.1"
+                  title="Enter the length of Link 3"
+                  placeholder="Link 3 Length"
+                />
+                </div>
+              <div class="input-group">
+                <label for="link4number">Output link:</label>
+                <input
+                  class="link-number"
+                  type="number"
+                  id="link4number"
+                  value="40"
+                  min="1"
+                  max="100"
+                  step="0.1"
+                  title="Enter the length of Link 4"
+                  placeholder="Link 4 Length"
+                />
+                </div>
+            </div>
+          </section>  
+        <section class=" tab-content" id="coordinates-tab">
+            <div class="coordinates-grid">
+              <div>
+                <h3>X Coordinate</h3>
+                <div class="coordinate-inputs">
+                  <div class="coordinate-input">
+                    <label for="ax">A</label>
+                    <input disabled type="number" id="ax" />
+                  </div>
+                  <div class="coordinate-input">
+                    <label for="bx">B</label>
+                    <input type="number" id="bx" class="coordinate" />
+                  </div>
+                  <div class="coordinate-input">
+                    <label for="cx">C</label>
+                    <input type="number" id="cx" class="coordinate" />
+                  </div>
+                  <div class="coordinate-input">
+                    <label for="dx">D</label>
+                    <input type="number" id="dx" class="coordinate" />
+                  </div>
+                  <div class="coordinate-input">
+                    <label for="px">P</label>
+                    <input type="number" id="px" class="coordinate" />
+                  </div>
+                </div>
+              </div>
+              <div>
+                <h3>Y Coordinate</h3>
+                <div class="coordinate-inputs">
+                  <div class="coordinate-input">
+                    <label for="ay">A</label>
+                    <input disabled type="number" id="ay" />
+                  </div>
+                  <div class="coordinate-input">
+                    <label for="by">B</label>
+                    <input type="number" id="by" class="coordinate" />
+                  </div>
+                  <div class="coordinate-input">
+                    <label for="cy">C</label>
+                    <input type="number" id="cy" class="coordinate" />
+                  </div>
+                  <div class="coordinate-input">
+                    <label for="dy">D</label>
+                    <input type="number" id="dy" class="coordinate" />
+                  </div>
+                 <div class="coordinate-input">
+                    <label for="py">P</label>
+                    <input type="number" id="py" class="coordinate" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="button-group">
+
+              <button type="button" id="setCoordinates">Set Coordinates</button>
+              <div class="change-angle">
+                <label for="adjust-angle">Adjust Angle</label>
+                <input
+                  type="range"
+                  id="adjust-angle"
+                  value="3"
+                  min="1"
+                  max="100"
+                />
+              </div>
+            </div>
+        </section>
+
+        </div>
+
+
+        </div>
+      </div>
+    </div>
+    <script src="./script.js"></script>
+    <script src="./zoom.js"></script>
+  </body>
+</html>
